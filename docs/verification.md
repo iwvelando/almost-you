@@ -54,3 +54,7 @@ Hosting, CI and deployment were added for `https://almost-you.isaacvelando.com/`
   - `data:` stays: removing it was seen to make the CSP listener fail on the select chevron.
   - WebKit reported a `style-src-attr` violation for native selects. `style-src-attr 'unsafe-inline'` resolves it (WebKit spec ×3 repeat passed), as for the Tom's Crossing exhibition.
 - Local results: `npm test`, `go test -race ./engine`, `go vet`, format check, build, and **69 Playwright checks** (23 scenarios on desktop Chromium, phone Chromium and iPhone-profile WebKit) pass. Desktop and phone screenshots were re-inspected.
+
+### First deploy attempt: an intermittent WebKit engine crash
+
+The first `main` run failed before deploying: one WebKit test found the engine had not started. Its trace showed a Go runtime crash in JavaScriptCore while decoding JSON ("fatal error: unknown caller pc" after a nil dereference in `encoding/json/jsontext`). The same tree passed on the pull request's WebKit run and in 345 repeated local WebKit runs, so it is rare, intermittent and specific to WebKit. The app now restarts the worker once, silently, when the engine fails to start, and asks the visitor to reload only after a second consecutive failure (`tests/engine-retry.spec.ts`, seen failing first). A crash after the engine is ready is not yet retried: requests then report a generic error until the visitor reloads the page.

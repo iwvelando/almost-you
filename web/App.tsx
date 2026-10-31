@@ -146,7 +146,10 @@ export function App() {
     [busy, setBusy] = useState(false),
     [restart, setRestart] = useState(0);
   const worker = useRef<Worker | null>(null),
-    sequence = useRef(0);
+    sequence = useRef(0),
+    // The Go runtime occasionally crashes while starting in WebKit. One silent
+    // restart hides that; only a second consecutive failure is shown.
+    retried = useRef(false);
   useEffect(() => {
     const update = () => {
       setRoute(location.hash || "#explore");
@@ -161,6 +164,11 @@ export function App() {
     const w = new Worker(`${import.meta.env.BASE_URL}worker.js`);
     worker.current = w;
     const fail = () => {
+      if (!retried.current) {
+        retried.current = true;
+        setRestart((v) => v + 1);
+        return;
+      }
       setBootError(
         "The name engine could not start. Please reload it to try again.",
       );
@@ -173,6 +181,7 @@ export function App() {
       if (message.type === "ready") {
         clearTimeout(timeout);
         setCatalog(message.catalog.names);
+        retried.current = false;
         setReady(true);
         document.documentElement.dataset.engine = "ready";
       } else if (message.type === "error") {
