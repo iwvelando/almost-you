@@ -1,4 +1,4 @@
-# Architecture and local operation
+# Architecture and operation
 
 The deliverable is `dist/`: static HTML, CSS, JavaScript, fonts, images, a WASM binary, and license notices. No application server or database is required. Vite's local server only serves files during review.
 
@@ -52,7 +52,7 @@ Open `http://127.0.0.1:5173`. For a phone on the same trusted network, use `npm 
 
 `npm run dev` rebuilds WASM once and starts Vite. Restart it after changing Go or data. `npm run test:browser` owns localhost port 4187 and tests the built site with the production CSP. `npx playwright install chromium webkit` installs browsers when missing. Screenshot and share-card scripts use separate ports 4192 and 4191 and close them on completion.
 
-The policy permits only same-origin static resources and WASM execution. It denies embedded objects and form submissions; forms are handled in React. Hosting must apply this CSP as an HTTP header later, especially `frame-ancestors`, which cannot be enforced by a meta tag. There is no service worker: after loading, exploration needs no requests, but a fresh offline visit is not guaranteed.
+The policy permits only same-origin static resources and WASM execution. It denies embedded objects and form submissions; forms are handled in React. CloudFront sends the same policy as an HTTP header (configured in `iwvelando/cloud-accounts`, `sites/almost-you.isaacvelando.com`), which is what enforces `frame-ancestors`; a meta tag cannot. The deploy job fails if the live header differs from this file. `img-src` allows `data:` only for the stylesheet's select chevron. `style-src-attr 'unsafe-inline'` is there because WebKit reports a violation for native `<select>` controls without it; stylesheets and scripts stay same-origin. `tests/smoke.spec.ts` fails on any reported violation. There is no service worker: after loading, exploration needs no requests, but a fresh offline visit is not guaranteed.
 
 ## Rebuilding data
 
@@ -62,4 +62,4 @@ Update the retrieval date, source hashes, coverage count, scientific copy and te
 
 ## Costs and limits
 
-Go WASM adds a few megabytes before compression and a startup delay. The separate worker keeps distance calculations off the rendering thread. This is appropriate for a local MVP and matches the reference project's architecture; a later performance pass could benchmark an equivalent TypeScript implementation. The baseline is not a neural simulation or a trained model. Neither deployment nor host logs/headers have been validated in this milestone.
+Go WASM adds a few megabytes before compression and a startup delay. The separate worker keeps distance calculations off the rendering thread. This matches the reference project's architecture; CloudFront serves the engine compressed, and a later performance pass could benchmark an equivalent TypeScript implementation. The baseline is not a neural simulation or a trained model.

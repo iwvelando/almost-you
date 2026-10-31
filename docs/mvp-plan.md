@@ -1,6 +1,6 @@
 # Almost You: local MVP plan
 
-The current scope supersedes the research document's proposed data collection and hosted services. This is a strictly static, private-by-construction explorer: bundled public data, a Go engine in a browser worker, React/TypeScript/Vite, and no database, telemetry, submissions, accounts, or remote inference. No deployment or infrastructure changes belong to this milestone.
+The current scope supersedes the research document's proposed data collection and hosted services. This is a strictly static, private-by-construction explorer: bundled public data, a Go engine in a browser worker, React/TypeScript/Vite, and no database, telemetry, submissions, accounts, or remote inference. The MVP milestone made no deployment or infrastructure changes; the site was launched afterwards (see `docs/verification.md`).
 
 ## Experience
 
@@ -20,4 +20,4 @@ Use normalized phoneme Levenshtein distance as a reproducible baseline, plus a s
 4. Production build with CSP, Chromium and WebKit verification, desktop light/dark and phone screenshot review.
 5. Architecture, math/citations, usage, license/provenance docs; local preview left running for review.
 
-Repository and DNS settings, cloud infrastructure, pushes, PRs and deployment are deferred. Future feature work follows Red–Green–Refactor. The existing research review remains the scholarly background, with a prominent scope correction.
+Repository and DNS settings, cloud infrastructure and deployment followed in the launch. Future feature work follows Red–Green–Refactor. The existing research review remains the scholarly background, with a prominent scope correction.
