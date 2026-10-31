@@ -1,6 +1,6 @@
-# Local MVP verification
+# Verification
 
-Verified 31 October 2026, on macOS arm64 with Node 26.12.0 and Go 1.27.2. This record covers the local production build, not a deployment.
+Verified 31 October 2026, on macOS arm64 with Node 26.12.0 and Go 1.27.2. The sections up to “Remaining review boundaries” cover the local production build; the launch round covers hosting and deployment.
 
 ## Checks completed
 
@@ -36,4 +36,21 @@ The engine is 5,030,461 bytes uncompressed (about 4.80 MiB), including the embed
 
 ## Remaining review boundaries
 
-The owner reported physical-iPhone issues in the initial MVP. The revised autocomplete has passed touch/focus checks in desktop WebKit, but keyboard retention and portrait/landscape behavior still need a fresh physical-iPhone check. No behavioral validation of the heuristic has been performed. No cloud infrastructure, DNS, deployment, remote settings or host behavior has been modified or verified. The original research review and current static-scope documents remain available in `docs/`.
+The owner reported physical-iPhone issues in the initial MVP. The revised autocomplete has passed touch/focus checks in desktop WebKit, but keyboard retention and portrait/landscape behavior still need a fresh physical-iPhone check. No behavioral validation of the heuristic has been performed. Hosting and deployment are covered by the launch round below. The original research review and current static-scope documents remain available in `docs/`.
+
+## Launch round (31 October 2026)
+
+Hosting, CI and deployment were added for `https://almost-you.isaacvelando.com/`. Infrastructure is `sites/almost-you.isaacvelando.com` in `iwvelando/cloud-accounts` (PR #21; CI plan 18 to add with every other root unchanged; applied 18 added, 0 changed, 0 destroyed; distribution `E289QHH5MQRCO7`).
+
+- New `@smoke` tests, which also run against the live site after each deploy:
+  - `engine.wasm` is served as `application/wasm`, compressed when served live. Run against the uncompressed local preview, that assertion was seen to fail.
+  - The page reaches `data-engine="ready"` with no CSP violation reported.
+  - The page header equals `deploy/content-security-policy.txt`.
+  - Robots and sitemap list only the canonical page.
+  - Link-preview tags reuse the page's title and description, and both card images have the right PNG sizes.
+- The share-card size and alt tags were absent until added, and the share test was seen to fail before that.
+- CSP:
+  - `blob:` was removed from `img-src` as unused.
+  - `data:` stays: removing it was seen to make the CSP listener fail on the select chevron.
+  - WebKit reported a `style-src-attr` violation for native selects. `style-src-attr 'unsafe-inline'` resolves it (WebKit spec ×3 repeat passed), as for the Tom's Crossing exhibition.
+- Local results: `npm test`, `go test -race ./engine`, `go vet`, format check, build, and **69 Playwright checks** (23 scenarios on desktop Chromium, phone Chromium and iPhone-profile WebKit) pass. Desktop and phone screenshots were re-inspected.
