@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://almost-you.isaacvelando.com/sitemap.xml

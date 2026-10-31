@@ -1,0 +1,22 @@
+{
+  "generated": "2026-10-31",
+  "years": [
+    1950,
+    2020
+  ],
+  "sourceLatestYear": 2020,
+  "minimumPooledCount": 500,
+  "names": 6027,
+  "method": "Pool recorded sex categories; intersect exact lower-case spelling with CMUdict. Preserve dictionary variant order. No alias count pooling.",
+  "sources": [
+    {
+      "url": "https://raw.githubusercontent.com/hackerb9/ssa-baby-names/main/alldata.txt",
+      "upstream": "https://www.ssa.gov/oact/babynames/limits.html",
+      "sha256": "7c8ca3c1ef72de0b0222a6c62bff494cc60c1d37e41b0745ede6570250e07f9a"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/cmusphinx/cmudict/master/cmudict.dict",
+      "sha256": "81917843c7f44ce2b094ac63873c2c7a4cf802040792c455ba3ca406891c3d22"
+    }
+  ]
+}
