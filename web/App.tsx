@@ -630,7 +630,10 @@ export function App() {
           almost you.
         </a>
         <span>A small experiment in being slightly misremembered.</span>
-        <a href="#privacy">Private by design</a>
+        <div className="footer-links">
+          <a href="#privacy">Private by design</a>
+          <a href="https://github.com/iwvelando/almost-you">About this site</a>
+        </div>
       </footer>
       <nav className="mobile-dock" aria-label="Mobile navigation">
         <a className={!science ? "active" : ""} href="#explore">

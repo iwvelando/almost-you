@@ -913,8 +913,10 @@ footer .footer-brand {
   color: var(--ink);
   letter-spacing: -0.06em;
 }
-footer > a:last-child {
+footer .footer-links {
   margin-left: auto;
+  display: flex;
+  gap: 24px;
 }
 .mobile-dock {
   display: none;
@@ -1383,8 +1385,8 @@ footer > a:last-child {
     order: 3;
     flex-basis: 100%;
   }
-  footer > a:last-child {
-    margin-left: auto;
+  footer .footer-links {
+    gap: 15px;
   }
   .mobile-dock {
     display: flex;
